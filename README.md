@@ -22,6 +22,22 @@ powershell -c "irm https://releases.herdr.dev/core/install.ps1 | iex"
 Builds are available for Linux and macOS on x86_64 and aarch64, and Windows on x86_64.
 Linux builds are static. On Windows, templates and quoted shell commands need `sh` on PATH, such as Git for Windows provides.
 
+### Windows ARM64 (this fork)
+
+This fork adds ARM64 ConPTY packaging and release replacement support.
+The matching native ARM64 runtime is included with the
+[Windows ARM64 desktop app bundle](https://github.com/atastrophic/herdr-app/releases).
+Copy its `herdr-core` folder to `%LOCALAPPDATA%\Programs\herdr-core` and
+add that folder to your user PATH. Keep `conpty\conpty.dll` and
+`conpty\arm64\OpenConsole.exe` beside the executables in that layout.
+`hc.exe` is the CLI alias for `herdr-core.exe`; neither is the desktop GUI.
+
+The upstream Windows installer and release service currently offer x64 only.
+Use the fork's bundle for manual updates rather than `hc update`.
+When building locally on ARM64, run
+`scripts\fetch-conpty.ps1 -Dest target\release -Arch arm64` after
+`cargo build --release --locked` to include the correct terminal host.
+
 Run `hc update` to update. Running terminals keep running.
 Updates and `hc server restart` keep the environment the core started with;
 run `hc server restart --fresh` from a terminal outside Herdr to use that shell's
